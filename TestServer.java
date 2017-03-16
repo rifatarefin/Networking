@@ -22,7 +22,7 @@ public class TestServer
 				Thread t = new Thread(wt);
 				t.start();
 				workerThreadCount++;
-				System.out.println("Client [" + id + "] is now connected. No. of worker threads = " + workerThreadCount);
+				System.out.println("Client.Client [" + id + "] is now connected. No. of worker threads = " + workerThreadCount);
 				id++;
 			}
 		}
@@ -152,7 +152,7 @@ class WorkerThread implements Runnable
 		}
 		
 		TestServer.workerThreadCount--;
-		System.out.println("Client [" + id + "] is now terminating. No. of worker threads = " 
+		System.out.println("Client.Client [" + id + "] is now terminating. No. of worker threads = "
 				+ TestServer.workerThreadCount);
 	}
 }

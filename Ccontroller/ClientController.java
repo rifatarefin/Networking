@@ -1,3 +1,7 @@
+package Ccontroller;
+
+import Client.SimpleClient;
+import Client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

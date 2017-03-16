@@ -6,7 +6,8 @@
 <?import javafx.scene.text.Text?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientCon2">
+<?import javafx.stage.FileChooser?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Ccontroller.clientCon2">
    <children>
       <Button layoutX="226.0" layoutY="186.0" mnemonicParsing="false" onAction="#syncAction" text="Sync" />
       <Text layoutX="94.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose">
