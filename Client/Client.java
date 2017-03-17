@@ -17,7 +17,7 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws Exception
     {
         FXMLLoader loader=new FXMLLoader();
-        loader.setLocation(getClass().getResource("clientPage1.fxml"));
+        loader.setLocation(getClass().getResource("/clientPage1.fxml"));
         Parent root = loader.load();
         ClientController controller=loader.getController();
         controller.setMain(this);
@@ -28,7 +28,7 @@ public class Client extends Application {
     }
     public void start2() throws Exception
     {
-        Parent root=FXMLLoader.load(getClass().getResource("clientPage2.fxml"));
+        Parent root=FXMLLoader.load(getClass().getResource("/clientPage2.fxml"));
         stage.setScene(new Scene(root));
         stage.show();
 //        FileChooser fileChooser = new FileChooser();
