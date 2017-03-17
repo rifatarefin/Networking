@@ -1,5 +1,7 @@
 package Server;
 
+import Scontroller.Constraints;
+
 import java.io.*;
 import java.net.*;
 
@@ -8,7 +10,7 @@ public class TestServer
 {
 	public static int workerThreadCount = 0;
 	
-	public TestServer()
+	public TestServer(Constraints constraints)
 	{
 		int id = 1;
 		
@@ -20,7 +22,7 @@ public class TestServer
 			while(true)
 			{
 				Socket s = ss.accept();		//TCP Connection
-				WorkerThread wt = new WorkerThread(s, id);
+				WorkerThread wt = new WorkerThread(s, id, constraints);
 				Thread t = new Thread(wt);
 				t.start();
 				workerThreadCount++;
@@ -40,17 +42,20 @@ class WorkerThread implements Runnable
 	private Socket socket;
 	private InputStream is;
 	private OutputStream os;
+	private ObjectOutputStream objectOutputStream;
 	
 	private int id = 0;
+	private Constraints constraints;
 	
-	public WorkerThread(Socket s, int id)
+	public WorkerThread(Socket s, int id, Constraints constraints)
 	{
 		this.socket = s;
-		
+		this.constraints=constraints;
 		try
 		{
 			this.is = this.socket.getInputStream();
 			this.os = this.socket.getOutputStream();
+			this.objectOutputStream=new ObjectOutputStream(this.socket.getOutputStream());
 		}
 		catch(Exception e)
 		{
@@ -67,6 +72,12 @@ class WorkerThread implements Runnable
 
         try {
             System.out.println(br.readLine());            //read studentID
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            objectOutputStream.writeObject(constraints);            //write constraints
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -33,12 +33,13 @@ public class ClientController {
         System.out.println(port.getCharacters());
         if (sid!=null && port !=null && ip !=null)
         {
-            new SimpleClient(ip.getText(),port.getText(),sid.getText());
-            try {
-                main.start2();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            new SimpleClient(ip.getText(),port.getText(),sid.getText()).setClient(main);
+
+//            try {
+//                main.start2();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
         }
 

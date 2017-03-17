@@ -1,6 +1,7 @@
 package Client;
 
 import Ccontroller.ClientController;
+import Scontroller.Constraints;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,6 +43,10 @@ public class Client extends Application {
 //        if (selectedFile != null) {
 //
 //        }
+
+    }
+    public void showConstraints(Constraints constraints)
+    {
 
     }
 

@@ -1,5 +1,6 @@
 package Client;
 
+import Scontroller.Constraints;
 import javafx.scene.control.TextField;
 
 import java.io.*;
@@ -8,9 +9,11 @@ import java.util.*;
 
 public class SimpleClient
 {
+    private Client client;
 	private static Socket s = null;
 	private static BufferedReader br = null;
 	private static PrintWriter pr = null;
+	private ObjectInputStream objectInputStream;
 
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
@@ -22,6 +25,8 @@ public class SimpleClient
 
             br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pr = new PrintWriter(s.getOutputStream());
+            objectInputStream=new ObjectInputStream(s.getInputStream());
+
         } catch (Exception e) {
             System.err.println("Problem in connecting with the server. Exiting main.");
             System.exit(1);
@@ -31,7 +36,12 @@ public class SimpleClient
         pr.println(sid);                                           //send student ID
         pr.flush();
 
+
         try {
+
+            Constraints constraints= (Constraints) objectInputStream.readObject();
+            client.showConstraints(constraints);
+
             strRecv = br.readLine();
             if (strRecv != null) {
                 System.out.println("Server says: " + strRecv);
@@ -46,6 +56,12 @@ public class SimpleClient
             System.exit(0);
         }
     }
+
+    public void setClient(Client client) {
+        this.client = client;
+
+    }
+
     void chat()
     {
 			

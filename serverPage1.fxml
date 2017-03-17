@@ -22,7 +22,7 @@
          </font>
       </Text>
       <Slider fx:id="fileNum" layoutX="222.0" layoutY="129.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
-      <Text layoutX="44.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max File Size[bytes]">
+      <Text layoutX="44.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max File Size [bytes]">
          <font>
             <Font size="15.0" />
          </font>
@@ -35,5 +35,11 @@
       </Text>
       <Button layoutX="248.0" layoutY="320.0" mnemonicParsing="false" onAction="#sendConstraints" text="OK" />
       <TextField fx:id="IDRange" layoutX="241.0" layoutY="219.0" prefHeight="26.0" prefWidth="243.0" promptText="1305001-1305120;1205111" />
+      <Text layoutX="44.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sync Delay [ms]">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <TextField fx:id="syncDelay" layoutX="191.0" layoutY="257.0" />
    </children>
 </AnchorPane>

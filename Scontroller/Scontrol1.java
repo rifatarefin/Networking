@@ -41,6 +41,9 @@ public class Scontrol1 {
     private TextField IDRange;
 
     @FXML
+    private TextField syncDelay;
+
+    @FXML
     void sendConstraints(ActionEvent event) {
         //System.out.println(dir);
         Constraints constraints=new Constraints();
@@ -49,7 +52,8 @@ public class Scontrol1 {
         constraints.setMaxFileSize((int) maxFileSize.getValue());
         constraints.setIDRange(IDRange.getText());
         constraints.setDestinationDir(dir);
-        new TestServer();
+        constraints.setSyncDelay(syncDelay.getText());
+        new TestServer(constraints);
 
     }
 

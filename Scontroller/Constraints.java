@@ -1,14 +1,17 @@
 package Scontroller;
 
+import java.io.Serializable;
+
 /**
  * Created by rifat on 3/17/17.
  */
-public class Constraints  {
+public class Constraints implements Serializable {
     private String destinationDir;
     private String fileType;
     private int fileNum;
     private int maxFileSize;
     private String IDRange;
+    private String syncDelay;
     public void setDestinationDir(String destinationDir)
     {
         this.destinationDir=destinationDir;
@@ -31,4 +34,33 @@ public class Constraints  {
     public void setIDRange(String IDRange) {
         this.IDRange = IDRange;
     }
+
+    public void setSyncDelay(String syncDelay) {
+        this.syncDelay = syncDelay;
+    }
+
+    public int getFileNum() {
+        return fileNum;
+    }
+
+    public int getMaxFileSize() {
+        return maxFileSize;
+    }
+
+    public String getDestinationDir() {
+        return destinationDir;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public String getIDRange() {
+        return IDRange;
+    }
+
+    public String getSyncDelay() {
+        return syncDelay;
+    }
+
 }
