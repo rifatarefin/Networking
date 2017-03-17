@@ -65,7 +65,13 @@ class WorkerThread implements Runnable
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.is));
 		PrintWriter pr = new PrintWriter(this.os);
 
-		pr.println("Your id is: " + this.id);
+        try {
+            System.out.println(br.readLine());            //read studentID
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        pr.println("Your id is: " + this.id);
 		pr.flush();
 		
 		String str;

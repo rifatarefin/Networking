@@ -15,7 +15,7 @@ public class SimpleClient
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
 	
-	public SimpleClient(String host, String port) {
+	public SimpleClient(String host, String port, String sid) {
         try {
             //s = new Socket("localhost", 5555);
             s = new Socket(host, Integer.parseInt(port));
@@ -28,6 +28,8 @@ public class SimpleClient
         }
 
 
+        pr.println(sid);                                           //send student ID
+        pr.flush();
 
         try {
             strRecv = br.readLine();

@@ -43,7 +43,7 @@ public class Server extends Application {
         directoryChooser.setTitle("Open Destination");
        // directoryChooser.setInitialDirectory(new File(""));
         scontrol1.setDir(directoryChooser.showDialog(stage).getAbsolutePath());
-        System.out.println(directoryChooser.showDialog(stage).getAbsolutePath());
+        //System.out.println(directoryChooser.showDialog(stage).getAbsolutePath());
 
 
     }

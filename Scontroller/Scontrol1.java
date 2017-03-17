@@ -7,7 +7,7 @@ package Scontroller;
 import Server.Server;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
+import Server.TestServer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -18,7 +18,7 @@ import java.io.File;
 public class Scontrol1 {
 
     Server server;
-    String dir;
+    String dir= new File("").getAbsolutePath();
 
     public void setDir(String dir) {
         this.dir = dir;
@@ -42,12 +42,14 @@ public class Scontrol1 {
 
     @FXML
     void sendConstraints(ActionEvent event) {
+        //System.out.println(dir);
         Constraints constraints=new Constraints();
         constraints.setFileType(fileType.getText());
         constraints.setFileNum((int) fileNum.getValue());
         constraints.setMaxFileSize((int) maxFileSize.getValue());
         constraints.setIDRange(IDRange.getText());
         constraints.setDestinationDir(dir);
+        new TestServer();
 
     }
 
