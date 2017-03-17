@@ -34,6 +34,7 @@ public class Server extends Application {
         scontrol1.setServer(this);
         primaryStage.setScene(new Scene(root));
         stage=primaryStage;
+        stage.setTitle("Server");
         primaryStage.show();
 
     }

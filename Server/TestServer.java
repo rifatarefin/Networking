@@ -70,11 +70,11 @@ class WorkerThread implements Runnable
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.is));
 		PrintWriter pr = new PrintWriter(this.os);
 
-        try {
-            System.out.println(br.readLine());            //read studentID
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println(br.readLine());            //read studentID
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         try {
             objectOutputStream.writeObject(constraints);            //write constraints

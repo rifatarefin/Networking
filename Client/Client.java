@@ -26,6 +26,7 @@ public class Client extends Application {
         controller.setMain(this);
         primaryStage.setScene(new Scene(root));
         stage=primaryStage;
+        stage.setTitle("Client");
         primaryStage.show();
 
     }
@@ -55,6 +56,7 @@ public class Client extends Application {
         controller.setMain(this);
         controller.show(constraints);
         stage.setScene(new Scene(root));
+        stage.setTitle("Client Constraints");
         stage.show();
 
     }

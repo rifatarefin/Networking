@@ -18,8 +18,9 @@ public class SimpleClient
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
 	
-	public SimpleClient(String host, String port, String sid) {
+	public SimpleClient(String host, String port, String sid, Client client) {
         try {
+            this.client=client;
             //s = new Socket("localhost", 5555);
             s = new Socket(host, Integer.parseInt(port));
 
@@ -33,25 +34,26 @@ public class SimpleClient
         }
 
 
-        pr.println(sid);                                           //send student ID
-        pr.flush();
+//        pr.println(sid);                                           //send student ID
+//        pr.flush();
 
 
         try {
 
             Constraints constraints= (Constraints) objectInputStream.readObject();
+
             client.showConstraints(constraints);
 
             strRecv = br.readLine();
             if (strRecv != null) {
                 System.out.println("Server says: " + strRecv);
             } else {
-                System.err.println("Error in reading from the socket. Exiting main.");
+                System.err.println("Error in reading from the socket. Exiting main1.");
                 cleanUp();
                 System.exit(0);
             }
         } catch (Exception e) {
-            System.err.println("Error in reading from the socket. Exiting main.");
+            System.err.println("Error in reading from the socket. Exiting main2.");
             cleanUp();
             System.exit(0);
         }
