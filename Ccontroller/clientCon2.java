@@ -8,10 +8,13 @@ import javafx.stage.FileChooser;
  * Created by rifat on 3/16/17.
  */
 
+
 public class clientCon2 {
 
     @FXML
-    FileChooser fileChooser;
+    void chooseFile(ActionEvent event) {
+
+    }
 
     @FXML
     void syncAction(ActionEvent event) {
@@ -19,3 +22,4 @@ public class clientCon2 {
     }
 
 }
+
