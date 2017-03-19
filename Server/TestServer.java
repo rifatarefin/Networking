@@ -182,6 +182,7 @@ class WorkerThread implements Runnable
                 if (fileEvent.getRemainder() == 0) {
                     System.out.println("Whole directory is copied...So system is going to exit");
                     System.exit(0);
+
                 }
 
             } catch (IOException e) {
