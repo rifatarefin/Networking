@@ -33,7 +33,7 @@ public class ClientController {
         System.out.println(port.getCharacters());
         if (sid!=null && port !=null && ip !=null)
         {
-            new SimpleClient(ip.getText(),port.getText(),sid.getText(),main);
+            new SimpleClient(ip.getText(),port.getText(),sid.getText(),main).syncAll();
 
 //            try {
 //                main.start2();

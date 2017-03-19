@@ -1,9 +1,11 @@
 package Server;
 
+import Client.fileEvent;
 import Scontroller.Constraints;
 
 import java.io.*;
 import java.net.*;
+import java.util.StringTokenizer;
 
 
 public class TestServer
@@ -43,9 +45,13 @@ class WorkerThread implements Runnable
 	private InputStream is;
 	private OutputStream os;
 	private ObjectOutputStream objectOutputStream;
+	private ObjectInputStream objectInputStream;
+	private FileOutputStream fileOutputStream;
 	
 	private int id = 0;
 	private Constraints constraints;
+	private fileEvent fileEvent;
+	private File dstFile;
 	
 	public WorkerThread(Socket s, int id, Constraints constraints)
 	{
@@ -56,6 +62,7 @@ class WorkerThread implements Runnable
 			this.is = this.socket.getInputStream();
 			this.os = this.socket.getOutputStream();
 			this.objectOutputStream=new ObjectOutputStream(this.socket.getOutputStream());
+			this.objectInputStream=new ObjectInputStream(this.socket.getInputStream());
 		}
 		catch(Exception e)
 		{
@@ -82,16 +89,17 @@ class WorkerThread implements Runnable
             e.printStackTrace();
         }
 
-        pr.println("Your id is: " + this.id);
-		pr.flush();
+//        pr.println("Your id is: " + this.id);
+//		pr.flush();
 		
-		String str;
+		String strRecv;
+		String[] a=new String[2];
 		
-		while(true)
+		while(socket.isConnected())
 		{
-			try
+			/*try
 			{
-				if( (str = br.readLine()) != null )
+				*//*if( (str = br.readLine()) != null )
 				{
 					if(str.equals("BYE"))
 					{
@@ -150,13 +158,37 @@ class WorkerThread implements Runnable
 				{
 					System.out.println("[" + id + "] terminated connection. Worker thread will terminate now.");
 					break;
-				}
-			}
-			catch(Exception e)
-			{
-				System.err.println("Problem in communicating with the client [" + id + "]. Terminating worker thread.");
-				break;
-			}
+				}*//*
+			}*/
+
+
+            try {
+                fileEvent = (fileEvent) objectInputStream.readObject();
+                if (fileEvent.getStatus().equalsIgnoreCase("Error"))
+                {
+                    System.out.println("Error occurred ..with file" + fileEvent.getFilename() + "at sending end ..");
+
+                }
+                String outputFile = fileEvent.getDestinationDirectory() + "/"+fileEvent.getFilename();
+                if (!new File(fileEvent.getDestinationDirectory()).exists()) {
+                    new File(fileEvent.getDestinationDirectory()).mkdirs();
+                }
+                dstFile = new File(outputFile);
+                fileOutputStream = new FileOutputStream(dstFile);
+                fileOutputStream.write(fileEvent.getFileData());
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                System.out.println("Output file : " + outputFile + " is successfully saved ");
+                if (fileEvent.getRemainder() == 0) {
+                    System.out.println("Whole directory is copied...So system is going to exit");
+                    System.exit(0);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 		}
 		
 		try

@@ -14,6 +14,9 @@ public class SimpleClient
 	private static BufferedReader br = null;
 	private static PrintWriter pr = null;
 	private ObjectInputStream objectInputStream;
+	private ObjectOutputStream objectOutputStream;
+	private Constraints constraints;
+	private fileEvent fileEvent;
 
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
@@ -27,6 +30,7 @@ public class SimpleClient
             br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pr = new PrintWriter(s.getOutputStream());
             objectInputStream=new ObjectInputStream(s.getInputStream());
+            objectOutputStream=new ObjectOutputStream(s.getOutputStream());
 
         } catch (Exception e) {
             System.err.println("Problem in connecting with the server. Exiting main.");
@@ -40,18 +44,18 @@ public class SimpleClient
 
         try {
 
-            Constraints constraints= (Constraints) objectInputStream.readObject();
+            constraints= (Constraints) objectInputStream.readObject();
 
             client.showConstraints(constraints);
 
-            strRecv = br.readLine();
+           /* strRecv = br.readLine();
             if (strRecv != null) {
                 System.out.println("Server says: " + strRecv);
             } else {
                 System.err.println("Error in reading from the socket. Exiting main1.");
                 cleanUp();
                 System.exit(0);
-            }
+            }*/
         } catch (Exception e) {
             System.err.println("Error in reading from the socket. Exiting main2.");
             cleanUp();
@@ -59,9 +63,72 @@ public class SimpleClient
         }
     }
 
-    public void setClient(Client client) {
-        this.client = client;
 
+
+
+    public void syncAll()
+    {
+
+        int fileCount;
+        constraints.setSourceDir("/home/rifat/Downloads/One/");
+        File srcDir = new File(constraints.getSourceDir());
+        if (!srcDir.isDirectory()) {
+            System.out.println("Source directory is not valid ..Exiting the client");
+            System.exit(0);
+        }
+        File[] files = srcDir.listFiles();
+        fileCount = files.length;
+        if (fileCount == 0) {
+            System.out.println("Empty directory ..Exiting the client");
+            System.exit(0);
+        }
+
+        for (int i = 0; i < fileCount; i++)
+        { System.out.println("Sending " + files[i].getAbsolutePath());
+            sendFile(files[i].getAbsolutePath(), fileCount - i - 1);
+
+        }
+    }
+
+    public void sendFile(String path, int index)
+    {
+
+        fileEvent = new fileEvent();
+        fileEvent.setDestinationDirectory(constraints.getDestinationDir());
+        fileEvent.setSourceDirectory("/home/rifat/Downloads/One/");
+        File file = new File(path);
+        fileEvent.setFilename(file.getName());
+        fileEvent.setRemainder(index);
+        DataInputStream dataInputStream = null;
+
+        try {
+            dataInputStream = new DataInputStream(new FileInputStream(file));
+            long len = (int) file.length();
+            byte[] fileBytes = new byte[(int) len];
+            int read = 0; int numRead = 0;
+            while (read < fileBytes.length && (numRead = dataInputStream.read(fileBytes, read, fileBytes.length - read)) >= 0)
+            {
+
+                read = read + numRead;
+            }
+            fileEvent.setFileData(fileBytes);
+            fileEvent.setStatus("Success");
+
+        }  catch (IOException e) {
+            e.printStackTrace();
+            fileEvent.setStatus("Error");
+        }
+
+        try {
+            objectOutputStream.writeObject(fileEvent);
+            //objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        /*pr.println("Uploaded.");
+        pr.flush();*/
     }
 
     void chat()
@@ -89,12 +156,12 @@ public class SimpleClient
 			if(strSend.equals("DL"))
 			{
 				
-				try
+				/*try
 				{
 					strRecv = br.readLine();					//These two lines are used to determine
 					int filesize=Integer.parseInt(strRecv);		//the size of the receiving file
 					byte[] contents = new byte[10000];
-        
+
 					FileOutputStream fos = new FileOutputStream("capture1.jpg");
 					BufferedOutputStream bos = new BufferedOutputStream(fos);
 					InputStream is = s.getInputStream();
@@ -114,7 +181,7 @@ public class SimpleClient
 				catch(Exception e)
 				{
 					System.err.println("Could not transfer file.");
-				}
+				}*/
 								
 			}
 			try
