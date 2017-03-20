@@ -40,10 +40,12 @@ import javafx.stage.FileChooser;
     @FXML
     void chooseFile(ActionEvent event) {
 
+        main.filechoose();
     }
 
     @FXML
     void syncAction(ActionEvent event) {
+        main.simpleClient.syncAll();
 
     }
     public void show(Constraints constraints)

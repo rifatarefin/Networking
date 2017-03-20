@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -16,6 +17,12 @@ import java.io.IOException;
 public class Client extends Application {
 
     Stage stage;
+    public SimpleClient simpleClient;
+
+    public void setSimpleClient(SimpleClient simpleClient) {
+        this.simpleClient = simpleClient;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -59,6 +66,15 @@ public class Client extends Application {
         stage.setTitle("Client Constraints");
         stage.show();
 
+    }
+
+
+    public void filechoose(  )
+    {
+        DirectoryChooser directoryChooser=new DirectoryChooser();
+        directoryChooser.setTitle("Open Destination");
+        // directoryChooser.setInitialDirectory(new File(""));
+        simpleClient.setSrcDir(directoryChooser.showDialog(stage).getAbsolutePath());
     }
 
     public static void main(String[] args) {

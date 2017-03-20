@@ -17,6 +17,7 @@ public class SimpleClient
 	private ObjectOutputStream objectOutputStream;
 	private Constraints constraints;
 	private fileEvent fileEvent;
+	private String srcDir;
 
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
@@ -64,7 +65,9 @@ public class SimpleClient
     }
 
 
-
+    public void setSrcDir(String srcDir) {
+        this.srcDir = srcDir;
+    }
 
     public void syncAll()
     {
@@ -95,7 +98,7 @@ public class SimpleClient
 
         fileEvent = new fileEvent();
         fileEvent.setDestinationDirectory(constraints.getDestinationDir());
-        fileEvent.setSourceDirectory("/home/rifat/Downloads/One/");
+        fileEvent.setSourceDirectory(this.srcDir);
         File file = new File(path);
         fileEvent.setFilename(file.getName());
         fileEvent.setRemainder(index);
@@ -106,9 +109,8 @@ public class SimpleClient
             long len = (int) file.length();
             byte[] fileBytes = new byte[(int) len];
             int read = 0; int numRead = 0;
-            while (read < fileBytes.length && (numRead = dataInputStream.read(fileBytes, read, fileBytes.length - read)) >= 0)
+            while (read < fileBytes.length && (numRead=dataInputStream.read(fileBytes,read,fileBytes.length-read)) >= 0)
             {
-
                 read = read + numRead;
             }
             fileEvent.setFileData(fileBytes);
