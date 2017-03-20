@@ -17,7 +17,8 @@ public class SimpleClient
 	private ObjectOutputStream objectOutputStream;
 	private Constraints constraints;
 	private fileEvent fileEvent;
-	private String srcDir;
+	private String srcDir="/home/rifat/Downloads/One/";
+	private int sid;
 
     Scanner input = new Scanner(System.in);
     String strSend = null, strRecv = null;
@@ -25,6 +26,7 @@ public class SimpleClient
 	public SimpleClient(String host, String port, String sid, Client client) {
         try {
             this.client=client;
+            this.sid= Integer.parseInt(sid);
             //s = new Socket("localhost", 5555);
             s = new Socket(host, Integer.parseInt(port));
 
@@ -69,12 +71,15 @@ public class SimpleClient
         this.srcDir = srcDir;
     }
 
+    public String getSrcDir() {
+        return srcDir;
+    }
+
     public void syncAll()
     {
 
         int fileCount;
-        constraints.setSourceDir("/home/rifat/Downloads/One/");
-        File srcDir = new File(constraints.getSourceDir());
+        File srcDir = new File(getSrcDir());
         if (!srcDir.isDirectory()) {
             System.out.println("Source directory is not valid ..Exiting the client");
             System.exit(0);
@@ -97,8 +102,8 @@ public class SimpleClient
     {
 
         fileEvent = new fileEvent();
-        fileEvent.setDestinationDirectory(constraints.getDestinationDir());
-        fileEvent.setSourceDirectory(this.srcDir);
+        fileEvent.setDestinationDirectory(constraints.getDestinationDir()+"/"+sid);
+        fileEvent.setSourceDirectory(getSrcDir());
         File file = new File(path);
         fileEvent.setFilename(file.getName());
         fileEvent.setRemainder(index);

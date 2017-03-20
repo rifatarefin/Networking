@@ -180,8 +180,8 @@ class WorkerThread implements Runnable
                 fileOutputStream.close();
                 System.out.println("Output file : " + outputFile + " is successfully saved ");
                 if (fileEvent.getRemainder() == 0) {
-                    System.out.println("Whole directory is copied...So system is going to exit");
-                    System.exit(0);
+                    System.out.println("Whole directory is copied...");
+                    //System.exit(0);
 
                 }
 

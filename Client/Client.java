@@ -72,7 +72,7 @@ public class Client extends Application {
     public void filechoose(  )
     {
         DirectoryChooser directoryChooser=new DirectoryChooser();
-        directoryChooser.setTitle("Open Destination");
+        directoryChooser.setTitle("Open Folder to Sync");
         // directoryChooser.setInitialDirectory(new File(""));
         simpleClient.setSrcDir(directoryChooser.showDialog(stage).getAbsolutePath());
     }
