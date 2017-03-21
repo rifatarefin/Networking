@@ -1,11 +1,10 @@
 package Server;
 
-import Client.fileEvent;
+import Client.fileStatus;
 import Scontroller.Constraints;
 
 import java.io.*;
 import java.net.*;
-import java.util.StringTokenizer;
 
 
 public class TestServer
@@ -50,7 +49,7 @@ class WorkerThread implements Runnable
 	
 	private int id = 0;
 	private Constraints constraints;
-	private fileEvent fileEvent;
+	private fileStatus fileStatus;
 	private File dstFile;
 	
 	public WorkerThread(Socket s, int id, Constraints constraints)
@@ -84,7 +83,9 @@ class WorkerThread implements Runnable
 //        }
 
         try {
-            objectOutputStream.writeObject(constraints);            //write constraints
+            objectOutputStream.writeObject(constraints);
+            objectOutputStream.flush();
+            //write constraints
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,7 +96,7 @@ class WorkerThread implements Runnable
 		String strRecv;
 		String[] a=new String[2];
 		
-		while(socket.isConnected())
+		while(true)
 		{
 			/*try
 			{
@@ -163,23 +164,34 @@ class WorkerThread implements Runnable
 
 
             try {
-                fileEvent = (fileEvent) objectInputStream.readObject();
-                if (fileEvent.getStatus().equalsIgnoreCase("Error"))
+                if(socket.isConnected()) fileStatus = (fileStatus) objectInputStream.readObject();
+                if (fileStatus.getStatus().equalsIgnoreCase("Error"))
                 {
-                    System.out.println("Error occurred ..with file" + fileEvent.getFilename() + "at sending end ..");
+                    System.out.println("Error occurred ..with file" + fileStatus.getFilename() + "at sending end ..");
 
                 }
-                String outputFile = fileEvent.getDestinationDirectory() + "/"+fileEvent.getFilename();
-                if (!new File(fileEvent.getDestinationDirectory()).exists()) {
-                    new File(fileEvent.getDestinationDirectory()).mkdirs();
+                String outputFile = fileStatus.getDestinationDirectory() + "/"+ fileStatus.getFilename();
+                if (!new File(fileStatus.getDestinationDirectory()).exists()) {
+                    new File(fileStatus.getDestinationDirectory()).mkdirs();
                 }
                 dstFile = new File(outputFile);
                 fileOutputStream = new FileOutputStream(dstFile);
-                fileOutputStream.write(fileEvent.getFileData());
-                fileOutputStream.flush();
-                fileOutputStream.close();
+				int total=0;			//how many bytes read
+				int filesize=(int)fileStatus.getFileSize();
+				byte[] contents;
+				while(total!=filesize)	//loop is continued until received byte=totalfilesize
+				{
+					contents=(byte[])objectInputStream.readObject();
+                    objectOutputStream.writeObject("packet received by server");
+                    objectOutputStream.flush();
+					total+=contents.length;
+					fileOutputStream.write(contents);
+
+				}
+				fileOutputStream.flush();
+				fileOutputStream.close();
                 System.out.println("Output file : " + outputFile + " is successfully saved ");
-                if (fileEvent.getRemainder() == 0) {
+                if (fileStatus.getRemainder() == 0) {
                     System.out.println("Whole directory is copied...");
                     //System.exit(0);
 
@@ -187,8 +199,10 @@ class WorkerThread implements Runnable
 
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                break;
             }
 		}
 		

@@ -7,9 +7,9 @@ import java.io.Serializable;
  */
 
 
-public class fileEvent implements Serializable {
+public class fileStatus implements Serializable {
 
-    public fileEvent() {
+    public fileStatus() {
     }
 
     private static final long serialVersionUID = 1L;
@@ -17,10 +17,18 @@ public class fileEvent implements Serializable {
     private String destinationDirectory;
     private String sourceDirectory;
     private String filename;
-    private long fileSize;
     private byte[] fileData;
     private String status;
     private int remainder;
+    private long fileSize;
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
 
     public String getDestinationDirectory() {
         return destinationDirectory;
@@ -30,9 +38,6 @@ public class fileEvent implements Serializable {
         this.destinationDirectory = destinationDirectory;
     }
 
-    public String getSourceDirectory() {
-        return sourceDirectory;
-    }
 
     public void setSourceDirectory(String sourceDirectory) {
         this.sourceDirectory = sourceDirectory;
@@ -46,13 +51,8 @@ public class fileEvent implements Serializable {
         this.filename = filename;
     }
 
-    public long getFileSize() {
-        return fileSize;
-    }
 
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
+
 
     public String getStatus() {
         return status;

@@ -1,7 +1,7 @@
 package Client;
 
 import Scontroller.Constraints;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.net.*;
@@ -16,7 +16,7 @@ public class SimpleClient
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 	private Constraints constraints;
-	private fileEvent fileEvent;
+	private fileStatus fileStatus;
 	private String srcDir="/home/rifat/Downloads/One/";
 	private int sid;
 
@@ -50,15 +50,20 @@ public class SimpleClient
             constraints= (Constraints) objectInputStream.readObject();
 
             client.showConstraints(constraints);
+            String idrange=constraints.getIDRange();
+            if(idrange!=null)
+            {
+                boolean a=checkRoll(idrange);
+                if(a==false)
+                {
+                    
+                    System.out.println("Student ID out of range....Reconnect");
+                    while (true);
+                }
+            }
 
-           /* strRecv = br.readLine();
-            if (strRecv != null) {
-                System.out.println("Server says: " + strRecv);
-            } else {
-                System.err.println("Error in reading from the socket. Exiting main1.");
-                cleanUp();
-                System.exit(0);
-            }*/
+
+
         } catch (Exception e) {
             System.err.println("Error in reading from the socket. Exiting main2.");
             cleanUp();
@@ -66,6 +71,32 @@ public class SimpleClient
         }
     }
 
+    public boolean checkRoll(String idrange)
+    {
+        StringTokenizer tokenizer=new StringTokenizer(idrange,";");
+        while (tokenizer.hasMoreTokens())
+        {
+            String t=tokenizer.nextToken();
+            if(String.valueOf(sid).equals(t))
+            {
+                return true;
+            }
+        }
+        System.out.println(idrange+"d++");
+        StringTokenizer token=new StringTokenizer(idrange,"-");
+        int i=0;String a[]=new String[2];
+        while (token.hasMoreTokens())
+        {
+            if(i==2)break;
+            String t=token.nextToken();
+            if(i<2)a[i]=t;
+            i++;
+            System.out.println(t+"++++++"+"");
+
+        }
+        if(sid>=Integer.parseInt(a[0]) && sid<Integer.parseInt(a[1]))return true;
+        return false;
+    }
 
     public void setSrcDir(String srcDir) {
         this.srcDir = srcDir;
@@ -91,9 +122,25 @@ public class SimpleClient
             System.exit(0);
         }
 
+        else if(fileCount>constraints.getFileNum())
+        {
+            System.out.println("More files than constraints provided");
+            while(true);
+        }
+
         for (int i = 0; i < fileCount; i++)
-        { System.out.println("Sending " + files[i].getAbsolutePath());
-            sendFile(files[i].getAbsolutePath(), fileCount - i - 1);
+        {
+
+            String type=files[i].getName(),ext=null;
+            int j=type.lastIndexOf(".");
+            if(j>0)
+            {
+                ext=type.substring(j+1);
+            }
+
+            System.out.println(ext+"===="+constraints.getFileType());
+            //if(ext.equals(constraints.getFileType()))
+                sendFile(files[i].getAbsolutePath(), fileCount - i - 1);
 
         }
     }
@@ -101,119 +148,65 @@ public class SimpleClient
     public void sendFile(String path, int index)
     {
 
-        fileEvent = new fileEvent();
-        fileEvent.setDestinationDirectory(constraints.getDestinationDir()+"/"+sid);
-        fileEvent.setSourceDirectory(getSrcDir());
+        fileStatus = new fileStatus();
+        fileStatus.setDestinationDirectory(constraints.getDestinationDir()+"/"+sid);
+        fileStatus.setSourceDirectory(getSrcDir());
         File file = new File(path);
-        fileEvent.setFilename(file.getName());
-        fileEvent.setRemainder(index);
+        System.out.println("Sending " + file.getAbsolutePath());
+        fileStatus.setFilename(file.getName());
+        fileStatus.setRemainder(index);
+        fileStatus.setStatus("Success");
+        fileStatus.setFileSize(file.length());
         DataInputStream dataInputStream = null;
+
+        try {
+            objectOutputStream.writeObject(fileStatus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             dataInputStream = new DataInputStream(new FileInputStream(file));
             long len = (int) file.length();
-            byte[] fileBytes = new byte[(int) len];
-            int read = 0; int numRead = 0;
-            while (read < fileBytes.length && (numRead=dataInputStream.read(fileBytes,read,fileBytes.length-read)) >= 0)
+            byte[] fileBytes ;
+            int read = 0;
+            while (read != (int)len)
             {
-                read = read + numRead;
+                int size=512;
+                if(read+512<=(int)len)read+=512;
+                else
+                {
+                    size=(int)len-read;
+                    read=(int)len;
+
+                }
+                fileBytes=new byte[size];
+                dataInputStream.read(fileBytes,0,size);
+                objectOutputStream.writeObject(fileBytes);
+                objectOutputStream.flush();
+                try {
+                    String t= (String) objectInputStream.readObject();
+                    System.out.println(t);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
-            fileEvent.setFileData(fileBytes);
-            fileEvent.setStatus("Success");
+            //fileEvent.setFileData(fileBytes);
 
-        }  catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-            fileEvent.setStatus("Error");
+            fileStatus.setStatus("Error");
         }
 
-        try {
-            objectOutputStream.writeObject(fileEvent);
-            //objectOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
 
         /*pr.println("Uploaded.");
         pr.flush();*/
     }
 
-    void chat()
-    {
-			
-		while(true)
-		{
-			System.out.print("Enter a string: ");
-			try
-			{
-				strSend = input.nextLine();
-			}
-			catch(Exception e)
-			{
-				continue;
-			}
-			
-			pr.println(strSend);
-			pr.flush();
-			if(strSend.equals("BYE"))
-			{
-				System.out.println("Client.Client wishes to terminate the connection. Exiting main.");
-				break;
-			}
-			if(strSend.equals("DL"))
-			{
-				
-				/*try
-				{
-					strRecv = br.readLine();					//These two lines are used to determine
-					int filesize=Integer.parseInt(strRecv);		//the size of the receiving file
-					byte[] contents = new byte[10000];
 
-					FileOutputStream fos = new FileOutputStream("capture1.jpg");
-					BufferedOutputStream bos = new BufferedOutputStream(fos);
-					InputStream is = s.getInputStream();
-				
-					int bytesRead = 0; 
-					int total=0;			//how many bytes read
-					
-					while(total!=filesize)	//loop is continued until received byte=totalfilesize
-					{
-						bytesRead=is.read(contents);
-						total+=bytesRead;
-						bos.write(contents, 0, bytesRead);
-                        System.out.println("Q");
-                    }
-					bos.flush(); 
-				}
-				catch(Exception e)
-				{
-					System.err.println("Could not transfer file.");
-				}*/
-								
-			}
-			try
-			{
-				strRecv = br.readLine();
-				if(strRecv != null)
-				{
-					System.out.println("Server says: " + strRecv);
-				}
-				else
-				{
-					System.err.println("Error in reading from the socket. Exiting main.");
-					break;
-				}
-			}
-			catch(Exception e)
-			{
-				System.err.println("Error in reading from the socket. Exiting main.");
-				break;
-			}
-			
-		}
-		
-		cleanUp();
-	}
 	
 	private static void cleanUp()
 	{

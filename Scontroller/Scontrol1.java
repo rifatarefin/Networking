@@ -29,19 +29,19 @@ public class Scontrol1 {
     }
 
     @FXML
-    private TextField fileType;
+    private TextField fileType=null;
 
     @FXML
-    private Slider fileNum;
+    private Slider fileNum=null;
 
     @FXML
-    private Slider maxFileSize;
+    private Slider maxFileSize=null;
 
     @FXML
-    private TextField IDRange;
+    private TextField IDRange=null;
 
     @FXML
-    private TextField syncDelay;
+    private TextField syncDelay=null;
 
     @FXML
     void sendConstraints(ActionEvent event) {
@@ -49,7 +49,7 @@ public class Scontrol1 {
         Constraints constraints=new Constraints();
         constraints.setFileType(fileType.getText());
         constraints.setFileNum((int) fileNum.getValue());
-        constraints.setMaxFileSize((int) maxFileSize.getValue());
+        constraints.setMaxFileSize((long) maxFileSize.getValue());
         constraints.setIDRange(IDRange.getText());
         constraints.setDestinationDir(dir);
         constraints.setSyncDelay(syncDelay.getText());

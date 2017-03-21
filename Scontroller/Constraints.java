@@ -10,7 +10,7 @@ public class Constraints implements Serializable {
     private String sourceDir;
     private String fileType;
     private int fileNum;
-    private int maxFileSize;
+    private long maxFileSize;
     private String IDRange;
     private String syncDelay;
     private String fileName;
@@ -18,46 +18,15 @@ public class Constraints implements Serializable {
     private String status;
     private int remainder;
 
-    public void setRemainder(int remainder) {
-        this.remainder = remainder;
-    }
 
-    public int getRemainder() {
-        return remainder;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
-    }
-
-    public byte[] getFileData() {
-        return fileData;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
 
     public void setDestinationDir(String destinationDir)
     {
         this.destinationDir=destinationDir;
     }
 
-    public void setSourceDir(String sourceDir) {
-        this.sourceDir = sourceDir;
-    }
 
     public void setFileType(String fileType)
     {
@@ -69,7 +38,7 @@ public class Constraints implements Serializable {
         this.fileNum=fileNum;
     }
 
-    public void setMaxFileSize(int maxFileSize) {
+    public void setMaxFileSize(long maxFileSize) {
         this.maxFileSize = maxFileSize;
     }
 
@@ -85,7 +54,7 @@ public class Constraints implements Serializable {
         return fileNum;
     }
 
-    public int getMaxFileSize() {
+    public long getMaxFileSize() {
         return maxFileSize;
     }
 
@@ -93,9 +62,6 @@ public class Constraints implements Serializable {
         return destinationDir;
     }
 
-    public String getSourceDir() {
-        return sourceDir;
-    }
 
     public String getFileType() {
         return fileType;
